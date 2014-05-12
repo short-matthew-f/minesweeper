@@ -9,14 +9,34 @@ class Tile
     [1, 0], [0, 1], [-1, 0], [0, -1]
   ]
   
-  attr_reader :flagged, :bomb, :fringe, :revealed, :position
+  attr_reader :flagged, :bomb, :revealed, :position
   
   attr_accessor :neighbors
   
   def initialize(position)
-    @flagged, @revealed, @bomb, @fringe = false, false, false, false
+    @flagged, @revealed, @bomb = false, false, false
     @neighbors = []
     @position = position
+  end
+  
+  def to_s
+    if self.flagged?
+      "?"
+    elsif self.revealed?
+      if self.bomb?
+        "*"
+      elsif self.bomb_count > 0
+        "#{self.bomb_count}"
+      else
+        "_"
+      end
+    else
+      " "
+    end  
+  end
+  
+  def bomb_count
+    @neighbors.map { |tile| tile.bomb? ? 1 : 0 }.inject(:+)
   end
   
   def x
@@ -33,10 +53,6 @@ class Tile
   
   def flagged?
     @flagged
-  end
-  
-  def fringe?
-    @fringe
   end
   
   def revealed?

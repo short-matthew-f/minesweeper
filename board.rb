@@ -53,4 +53,17 @@ class Board
     @tiles[position[0]][position[1]]
   end
   
+  def display
+    @tiles.map do |row|
+      row.map do |tile|
+        "#{tile}"
+      end.join(" | ")
+    end.join("\n" + "--+---+---+---+---+---+---+---+--" + "\n")
+  end  
+  
+  def render_tile(tile)
+    # render differently for flagged, fringe and revealed
+
+  end
+  
 end
