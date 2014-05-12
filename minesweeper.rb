@@ -1,5 +1,6 @@
 require './tile.rb'
 require './board.rb'
+require 'yaml'
 
 class Minesweeper
   THE_ADJACENT_EIGHT = [
@@ -46,8 +47,15 @@ class Minesweeper
   
   def get_tile
     begin
-      puts "Which tile do you want to click? (as row, col)"
+      puts "Which tile do you want to click? (as row, col OR type q to quit)"
       user_input = gets.chomp.split(", ")
+      
+      if user_input == ["q"]
+        File.open('save_game.txt', 'w') { |f| f.write @board.to_yaml }
+        puts "game has been saved."
+        abort
+      end
+      
       pos = [Integer(user_input[0]), Integer(user_input[1])]
     rescue
       puts "Seriously?"
@@ -71,7 +79,13 @@ class Minesweeper
 end
 
 if __FILE__ == $PROGRAM_NAME
-  board = Board.new
+  puts "(l)oad or (n)ew?"
+  choice = gets.chomp.downcase
+  if choice == "l"
+    board = YAML::load_file('save_game.txt')
+  else
+    board = Board.new
+  end
   game = Minesweeper.new(board)
   game.play
 end
