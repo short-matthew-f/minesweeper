@@ -25,13 +25,26 @@ class Minesweeper
   
   def play
     until over?
-      display_board
+      puts display_board
+      
       
     end
   end
   
-  def display_board
+  def prompt
+    puts "Which tile do you want to click?"
     
+    pos = gets.chomp.split(", ").map(&:to_i)
+    
+    @board[pos[0]][pos[1]]
+  end
+  
+  def display_board
+    @board.map do |row|
+      row.map do |tile|
+        render_tile(tile)
+      end.join(" | ")
+    end.join("\n" + "--+---+---+---+---+---+---+---+--" + "\n")
   end
   
   def over?   
@@ -47,10 +60,8 @@ class Minesweeper
   def won?
     @board.flatten.select do |tile|
       tile.bomb?
-    end.all? { |tile| tile.flagged? }
-    
-      &&
-    
+    end.all? { |tile| tile.flagged? } &&
+      
     @board.flatten.reject do |tile|
       tile.bomb?
     end.all? { |tile| tile.revealed? }
