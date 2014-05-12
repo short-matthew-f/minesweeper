@@ -23,6 +23,39 @@ class Minesweeper
     @board = board || Minesweeper.new_board
   end
   
+  def play
+    until over?
+      display_board
+      
+    end
+  end
+  
+  def display_board
+    
+  end
+  
+  def over?   
+    lost? || won?
+  end
+  
+  def lost?
+    @board.flatten.select do |tile|
+      tile.bomb? && tile.revealed?
+    end.any?
+  end
+  
+  def won?
+    @board.flatten.select do |tile|
+      tile.bomb?
+    end.all? { |tile| tile.flagged? }
+    
+      &&
+    
+    @board.flatten.reject do |tile|
+      tile.bomb?
+    end.all? { |tile| tile.revealed? }
+  end
+
   # private methods
   
   private
@@ -31,11 +64,26 @@ class Minesweeper
   
   protected
   
+  def render_tile(tile)
+    # render differently for flagged, fringe and revealed
+    if tile.flagged?
+      "?"
+    elsif tile.fringe?
+      "#{number_of_nearby_bombs(tile)}"
+    elsif tile.revealed?
+      "_"
+    else
+      " "
+    end
+  end
   
+  def number_of_nearby_bombs(tile)
+    
+  end
 end
 
 class Tile
-  attr_reader :flagged, :bomb, :fringe
+  attr_reader :flagged, :bomb, :fringe, :revealed
   
   def initialize
   end
@@ -45,11 +93,15 @@ class Tile
   end
   
   def flagged?
-    flagged
+    @flagged
   end
   
   def fringe?
-    fringe
+    @fringe
+  end
+  
+  def revealed?
+    @revealed
   end
   
   def set_bomb
