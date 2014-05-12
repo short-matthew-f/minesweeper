@@ -1,6 +1,8 @@
 require 'debugger'
 
 class Board
+  attr_reader :tiles
+  
   BOARD_SIZE = 9
   TOTAL_MINES = 10
   
@@ -27,12 +29,6 @@ class Board
       t.set_bomb
     end
     
-    add_neighbors(tiles)
-    
-    return tiles
-  end 
-  
-  def add_neighbors(tiles)
     tiles.each do |row|
       row.each do |tile|
         THE_ADJACENT_EIGHT.map do |x, y|
@@ -44,14 +40,16 @@ class Board
         end
       end
     end    
+    
+    return tiles
+  end 
+  
+  def add_neighbors(tiles)
+
   end 
   
   def initialize
     @tiles = Board.new_board
-  end
-  
-  def inspect
-    "all is ok"
   end
   
   def [](position)
@@ -60,15 +58,30 @@ class Board
   
   def display
     @tiles.map do |row|
-      row.map do |tile|
+      " " + row.map do |tile|
         "#{tile}"
-      end.join(" | ")
-    end.join("\n" + "--+---+---+---+---+---+---+---+--" + "\n")
+      end.join(" | ") + " "
+    end.join("\n" + "---+---+---+---+---+---+---+---+---" + "\n")
   end  
   
-  def render_tile(tile)
-    # render differently for flagged, fringe and revealed
-
+  def over?   
+    self.lost? || self.won?
+  end
+  
+  def lost?
+    @tiles.flatten.select do |tile|
+      tile.bomb? && tile.revealed?
+    end.any?
+  end
+  
+  def won?
+    @tiles.flatten.select do |tile|
+      tile.bomb?
+    end.all? { |tile| tile.flagged? } &&
+      
+    @tiles.flatten.reject do |tile|
+      tile.bomb?
+    end.all? { |tile| tile.revealed? }
   end
   
 end

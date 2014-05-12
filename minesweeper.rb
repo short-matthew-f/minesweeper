@@ -10,14 +10,16 @@ class Minesweeper
   end
   
   def play
-    until over?
-      puts display_board
+    until @board.over?
+      puts @board.display
       
       tile = get_tile
       action = get_action
       
       update_board(tile, action)
     end
+    
+    puts @board.lost? ? "You lose!" : "You won!"
   end
   
   def update_board(tile, action)
@@ -25,24 +27,14 @@ class Minesweeper
       tile.change_flag
     else    
       if tile.bomb?
-        @board.map do |row|
+        @board.tiles.map do |row|
           row.map do |t|
             t.reveal
           end
         end
       else
-        spread_out_from(tile)
+        tile.spread_out
       end
-    end
-  end
-  
-  def spread_out_from(tile)
-    tile.reveal
-    
-    tile.four_cardinals.each do |t|
-      next if t.bomb? || t.revealed?
-      
-      spread_out_from(t)
     end
   end
   
@@ -51,7 +43,7 @@ class Minesweeper
     
     pos = gets.chomp.split(", ").map(&:to_i)
     
-    @board[pos[0]][pos[1]]
+    @board[pos]
   end
   
   def get_action
@@ -60,25 +52,7 @@ class Minesweeper
     action = gets.chomp
   end
   
-  def over?   
-    lost? || won?
-  end
-  
-  def lost?
-    @board.flatten.select do |tile|
-      tile.bomb? && tile.revealed?
-    end.any?
-  end
-  
-  def won?
-    @board.flatten.select do |tile|
-      tile.bomb?
-    end.all? { |tile| tile.flagged? } &&
-      
-    @board.flatten.reject do |tile|
-      tile.bomb?
-    end.all? { |tile| tile.revealed? }
-  end
+
 
   # private methods
   

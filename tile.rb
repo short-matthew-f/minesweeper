@@ -42,17 +42,19 @@ class Tile
   def spread_out
     self.reveal
     
-    self.four_cardinals.each do |t|
-      next if t.bomb? || t.revealed?
+    unless self.bomb_count > 0
+      self.four_cardinals.each do |t|
+        next if t.bomb? || t.revealed?
       
-      t.spread_out
+        t.spread_out
+      end
     end
   end
   
   def four_cardinals
     four_cards = []
     
-    FOUR_CARDINALS_OF_THE_APOCALYPSE.map do |x, y|
+    THE_ADJACENT_EIGHT.map do |x, y|
       four_cards << [self.x + x, self.y + y]
     end
     
