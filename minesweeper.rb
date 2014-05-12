@@ -1,13 +1,19 @@
+require './tile.rb'
+require './board.rb'
+
+
 class Minesweeper
   TOTAL_MINES = 10
+  # EXTENDED CARDINALS
+  # NORMAL CARDINALS
   
   attr_reader :board
   
   # factory methods
   def self.new_board
     board = (0..8).map do |row|
-      (0..8).map do |tile|
-        Tile.new
+      (0..8).map do |col|
+        Tile.new([row, col])
       end
     end
     
@@ -39,6 +45,7 @@ class Minesweeper
       tile.change_flag
     else
       tile.reveal
+      
       if tile.bomb?
         @board.map do |row|
           row.map do |t|
@@ -46,9 +53,19 @@ class Minesweeper
           end
         end
       else
-        # check adj tiles
+        spread_out_from(tile)
       end
     end
+  end
+  
+  def spread_out_from(tile)
+    # look at all 8 adjacent tiles
+    # count how many are bombs
+    # if there are bombs, set it as a fringe & the bomb count == value
+    # spread_out_from north, east, south, west tiles which haven't been revealed & are not bombs
+    
+    
+    
   end
   
   def get_tile
@@ -116,43 +133,8 @@ class Minesweeper
     end
   end
   
-  def number_of_nearby_bombs(tile)
-    
+  def adjacent_bombs(tile)
+    tile.position
   end
 end
 
-class Tile
-  attr_reader :flagged, :bomb, :fringe, :revealed
-  
-  def initialize
-    @flagged, @revealed, @bomb, @fringe = false, false, false, false
-  end
-  
-  def bomb?
-    @bomb
-  end
-  
-  def flagged?
-    @flagged
-  end
-  
-  def fringe?
-    @fringe
-  end
-  
-  def revealed?
-    @revealed
-  end
-  
-  def set_bomb
-    @bomb = true
-  end
-  
-  def change_flag
-    @flagged = !flagged?
-  end
-  
-  def reveal
-    @revealed = true
-  end
-end
