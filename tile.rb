@@ -1,14 +1,5 @@
 class Tile
-  THE_ADJACENT_EIGHT = [
-    [1, -1],  [1, 0],  [1, 1], 
-    [0, -1],           [0, 1],
-    [-1, -1], [-1, 0], [-1, 1]
-  ]
-  
-  FOUR_CARDINALS_OF_THE_APOCALYPSE = [
-    [1, 0], [0, 1], [-1, 0], [0, -1]
-  ]
-  
+
   attr_reader :flagged, :bomb, :revealed, :position
   
   attr_accessor :neighbors
@@ -43,22 +34,12 @@ class Tile
     self.reveal
     
     unless self.bomb_count > 0
-      self.four_cardinals.each do |t|
+      self.neighbors.each do |t|
         next if t.bomb? || t.revealed?
       
         t.spread_out
       end
     end
-  end
-  
-  def four_cardinals
-    four_cards = []
-    
-    THE_ADJACENT_EIGHT.map do |x, y|
-      four_cards << [self.x + x, self.y + y]
-    end
-    
-    @neighbors.select { |neighbor| four_cards.include?(neighbor.position) }
   end
   
   def x

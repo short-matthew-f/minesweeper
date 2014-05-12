@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'debugger'
 
 class Board
@@ -11,11 +13,7 @@ class Board
     [0, -1],           [0, 1],
     [-1, -1], [-1, 0], [-1, 1]
   ]
-  
-  FOUR_CARDINALS_OF_THE_APOCALYPSE = [
-    [1, 0], [0, 1], [-1, 0], [0, -1]
-  ]
-  
+
   def self.new_board
     tiles = Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) }
     
@@ -44,10 +42,6 @@ class Board
     return tiles
   end 
   
-  def add_neighbors(tiles)
-
-  end 
-  
   def initialize
     @tiles = Board.new_board
   end
@@ -57,11 +51,15 @@ class Board
   end
   
   def display
-    @tiles.map do |row|
-      " " + row.map do |tile|
+    "    0   1   2   3   4   5   6   7   8  \n" +
+    "  +---+---+---+---+---+---+---+---+---+\n" +
+    @tiles.each_with_index.map do |row, index|
+      "#{index} | " + row.map do |tile|
         "#{tile}"
-      end.join(" | ") + " "
-    end.join("\n" + "---+---+---+---+---+---+---+---+---" + "\n")
+      end.join(" | ") + " |"
+    end.join("\n  +---+---+---+---+---+---+---+---+---+\n") +
+    "\n  +---+---+---+---+---+---+---+---+---+\n"
+     
   end  
   
   def over?   
