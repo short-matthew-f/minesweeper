@@ -27,6 +27,12 @@ class Board
       t.set_bomb
     end
     
+    add_neighbors(tiles)
+    
+    return tiles
+  end 
+  
+  def add_neighbors(tiles)
     tiles.each do |row|
       row.each do |tile|
         THE_ADJACENT_EIGHT.map do |x, y|
@@ -37,9 +43,8 @@ class Board
           end
         end
       end
-    end
-    return tiles
-  end  
+    end    
+  end 
   
   def initialize
     @tiles = Board.new_board

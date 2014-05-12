@@ -23,9 +23,7 @@ class Minesweeper
   def update_board(tile, action)
     if ["flag", "unflag"].include?(action)
       tile.change_flag
-    else
-      tile.reveal
-      
+    else    
       if tile.bomb?
         @board.map do |row|
           row.map do |t|
@@ -39,13 +37,13 @@ class Minesweeper
   end
   
   def spread_out_from(tile)
-    # look at all 8 adjacent tiles
-    # count how many are bombs
-    # if there are bombs, set it as a fringe & the bomb count == value
-    # spread_out_from north, east, south, west tiles which haven't been revealed & are not bombs
+    tile.reveal
     
-    
-    
+    tile.four_cardinals.each do |t|
+      next if t.bomb? || t.revealed?
+      
+      spread_out_from(t)
+    end
   end
   
   def get_tile
@@ -60,14 +58,6 @@ class Minesweeper
     puts "What do you want to do? (flag, unflag, or reveal)"
     
     action = gets.chomp
-  end
-  
-  def display_board
-    @board.map do |row|
-      row.map do |tile|
-        render_tile(tile)
-      end.join(" | ")
-    end.join("\n" + "--+---+---+---+---+---+---+---+--" + "\n")
   end
   
   def over?   
@@ -98,24 +88,6 @@ class Minesweeper
   
   protected
   
-  def render_tile(tile)
-    # render differently for flagged, fringe and revealed
-    if tile.flagged?
-      "?"
-    elsif tile.fringe?
-      "#{number_of_nearby_bombs(tile)}"
-    elsif tile.revealed? && tile.bomb?
-      "*"
-    elsif tile.revealed?
-      "_"
-    else
-      " "
-    end
-  end
-  
-  def adjacent_bombs(tile)
-    tile.position
-  end
 end
 
 if __FILE__ == $PROGRAM_NAME
