@@ -12,17 +12,17 @@ class Tile
   
   def to_s
     if self.flagged?
-      "?"
+      "⚐"
     elsif self.revealed?
       if self.bomb?
-        "*"
+        "☠"
       elsif self.bomb_count > 0
-        "#{self.bomb_count}"
+        "#{self.bomb_symbol}"
       else
-        "_"
+        " "
       end
     else
-      " "
+      "⬚"
     end  
   end
   
@@ -30,6 +30,12 @@ class Tile
     @neighbors.map { |tile| tile.bomb? ? 1 : 0 }.inject(:+)
   end
   
+  def bomb_symbol
+    #symbols = %w{ ⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ }
+    symbols = %w{ ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ }
+    symbols[self.bomb_count - 1]
+  end
+    
   def spread_out
     self.reveal
     
