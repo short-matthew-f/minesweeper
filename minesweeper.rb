@@ -27,16 +27,33 @@ class Minesweeper
     until over?
       puts display_board
       
+      tile = get_tile
+      action = get_action
       
+      if action == "flag" || action == "unflag"
+        tile.change_flag
+      else
+        update_board(tile)
+      end
     end
   end
   
-  def prompt
+  def update_board(tile)
+    
+  end
+  
+  def get_tile
     puts "Which tile do you want to click?"
     
     pos = gets.chomp.split(", ").map(&:to_i)
     
     @board[pos[0]][pos[1]]
+  end
+  
+  def get_action
+    puts "What do you want to do? (flag, unflag, or reveal)"
+    
+    action = gets.chomp
   end
   
   def display_board
@@ -117,5 +134,9 @@ class Tile
   
   def set_bomb
     @bomb = true
+  end
+  
+  def change_flag
+    @flagged = !flagged?
   end
 end
