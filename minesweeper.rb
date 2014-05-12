@@ -30,16 +30,25 @@ class Minesweeper
       tile = get_tile
       action = get_action
       
-      if action == "flag" || action == "unflag"
-        tile.change_flag
-      else
-        update_board(tile)
-      end
+      update_board(tile, action)
     end
   end
   
-  def update_board(tile)
-    
+  def update_board(tile, action)
+    if ["flag", "unflag"].include?(action)
+      tile.change_flag
+    else
+      tile.reveal
+      if tile.bomb?
+        @board.map do |row|
+          row.map do |t|
+            t.reveal
+          end
+        end
+      else
+        # check adj tiles
+      end
+    end
   end
   
   def get_tile
@@ -98,6 +107,8 @@ class Minesweeper
       "?"
     elsif tile.fringe?
       "#{number_of_nearby_bombs(tile)}"
+    elsif tile.revealed? && tile.bomb?
+      "*"
     elsif tile.revealed?
       "_"
     else
@@ -114,6 +125,7 @@ class Tile
   attr_reader :flagged, :bomb, :fringe, :revealed
   
   def initialize
+    @flagged, @revealed, @bomb, @fringe = false, false, false, false
   end
   
   def bomb?
@@ -138,5 +150,9 @@ class Tile
   
   def change_flag
     @flagged = !flagged?
+  end
+  
+  def reveal
+    @revealed = true
   end
 end
