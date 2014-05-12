@@ -1,32 +1,12 @@
 require './tile.rb'
 require './board.rb'
 
-
 class Minesweeper
-  TOTAL_MINES = 10
-  # EXTENDED CARDINALS
-  # NORMAL CARDINALS
-  
   attr_reader :board
   
-  # factory methods
-  def self.new_board
-    board = (0..8).map do |row|
-      (0..8).map do |col|
-        Tile.new([row, col])
-      end
-    end
-    
-    board.flatten.shuffle.take(10).map do |t|
-      t.set_bomb
-    end
-    
-    board
-  end  
-  
   # public methods
-  def initialize(board = nil)
-    @board = board || Minesweeper.new_board
+  def initialize(board)
+    @board = board
   end
   
   def play
@@ -138,3 +118,8 @@ class Minesweeper
   end
 end
 
+if __FILE__ == $PROGRAM_NAME
+  board = Board.new()
+  game = Minesweeper.new(board)
+  game.play
+end

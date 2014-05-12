@@ -1,9 +1,30 @@
 class Tile
+  THE_ADJACENT_EIGHT = [
+    [1, -1],  [1, 0],  [1, 1], 
+    [0, -1],           [0, 1],
+    [-1, -1], [-1, 0], [-1, 1]
+  ]
+  
+  FOUR_CARDINALS_OF_THE_APOCALYPSE = [
+    [1, 0], [0, 1], [-1, 0], [0, -1]
+  ]
+  
   attr_reader :flagged, :bomb, :fringe, :revealed, :position
   
-  def initialize(pos)
+  attr_accessor :neighbors
+  
+  def initialize(position)
     @flagged, @revealed, @bomb, @fringe = false, false, false, false
-    @position = pos
+    @neighbors = []
+    @position = position
+  end
+  
+  def x
+    @position[0]
+  end
+  
+  def y
+    @position[1]
   end
   
   def bomb?
