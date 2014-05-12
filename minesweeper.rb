@@ -1,6 +1,8 @@
 class Minesweeper
   TOTAL_MINES = 10
   
+  attr_reader :board
+  
   # factory methods
   def self.new_board
     board = (0..8).map do |row|
@@ -39,7 +41,7 @@ class Tile
   end
   
   def bomb?
-    bomb
+    @bomb
   end
   
   def flagged?
@@ -51,6 +53,6 @@ class Tile
   end
   
   def set_bomb
-    bomb = true
+    @bomb = true
   end
 end
