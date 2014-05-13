@@ -31,7 +31,6 @@ class Tile
   end
   
   def bomb_symbol
-    #symbols = %w{ ⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ }
     symbols = %w{ ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ }
     symbols[self.bomb_count - 1]
   end

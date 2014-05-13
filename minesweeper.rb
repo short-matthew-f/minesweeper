@@ -47,7 +47,7 @@ class Minesweeper
   
   def get_tile
     begin
-      puts "Which tile do you want to click? (as row, col OR type q to quit)"
+      puts "Which tile do you want to click? (as row, col OR type q to save and quit game)"
       user_input = gets.chomp.split(", ")
       
       if user_input == ["q"]
@@ -82,7 +82,12 @@ if __FILE__ == $PROGRAM_NAME
   puts "(l)oad or (n)ew?"
   choice = gets.chomp.downcase
   if choice == "l"
-    board = YAML::load_file('save_game.txt')
+    if File.file?('save_game.txt')
+      board = YAML::load_file('save_game.txt')
+    else
+      puts "There's no game to load, creating new board..."
+      board = Board.new
+    end
   else
     board = Board.new
   end
