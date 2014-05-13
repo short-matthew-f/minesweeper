@@ -19,10 +19,10 @@ class Tile
       elsif self.bomb_count > 0
         "#{self.bomb_symbol}"
       else
-        " "
+        "⬚"
       end
     else
-      "⬚"
+      " "
     end  
   end
   
